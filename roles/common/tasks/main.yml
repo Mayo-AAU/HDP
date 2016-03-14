@@ -1,0 +1,24 @@
+# common role
+---
+- name: install needed packages
+  yum: name={{item}} state=latest
+  with_items:
+    - wget
+    - unzip
+    - emacs-nox
+    - rsync
+    - tar
+    - bzip2
+
+- name: Install Ambari repos
+  get_url: url=http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.1.0/ambari.repo dest=/etc/yum.repos.d/ambari.repo
+
+- name: create dewey .ssh directory
+  file: state=directory name=/root/.ssh owner=root mode=0700
+
+- name: copy SSH keys
+  copy: src=files/{{item}} dest=/root/.ssh/ mode=0644 owner=root group=root
+  with_items:
+    - authorized_keys
+    - config
+

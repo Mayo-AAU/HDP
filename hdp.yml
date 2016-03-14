@@ -1,0 +1,21 @@
+---
+
+# Ansible playbook to install HDP
+#
+# Two host groups are defined, 'masters' and 'workers' with
+# a pooled group 'hdp'.
+
+# Install the Ambari / HDP repos
+
+- hosts: hdp
+  become: yes
+
+  roles:
+    - common
+
+
+
+# Install Ambari server on `ambari-master` node
+- hosts: ambari-master
+  become: yes
+
