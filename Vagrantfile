@@ -38,6 +38,8 @@ Vagrant.configure(2) do |config|
 
   # Use ansible as the provisioning system
   config.vm.provision "ansible" do |ansible|
+    # All machines at once
+    ansible.limit = "all"
     ansible.groups = {
       "masters" => ['hdp-master01'],
       "workers" => ['hdp-worker01'],

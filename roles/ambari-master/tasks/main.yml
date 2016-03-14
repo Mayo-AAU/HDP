@@ -9,9 +9,8 @@
 - name: install ambari-server
   yum: name=ambari-server state=latest
 
-
 - name: setup ambari-server
   command: ambari-server setup --silent
 
 - name: start ambari-server
-  command: ambari-server start
+  service: name=ambari-server state=started enabled=yes
