@@ -1,0 +1,5 @@
+# ambari-agent meta
+---
+dependencies:
+  - { role: common }
+  

@@ -1,0 +1,2 @@
+# Don't check host keys
+StrictHostKeyChecking no

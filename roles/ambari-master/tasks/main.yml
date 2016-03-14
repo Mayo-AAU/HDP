@@ -1,0 +1,17 @@
+# ambari-master
+---
+- name: install SSH private key
+  copy: src=files/id_rsa dest=/root/.ssh/ mode=0600 owner=root group=root
+
+- name: install SSH public key
+  copy: src=files/id_rsa.pub dest=/root/.ssh/ mode=0644 owner=root group=root
+
+- name: install ambari-server
+  yum: name=ambari-server state=latest
+
+
+- name: setup ambari-server
+  command: ambari-server setup --silent
+
+- name: start ambari-server
+  command: ambari-server start

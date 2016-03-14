@@ -1,0 +1,5 @@
+# ambari-master meta
+---
+dependencies:
+  - { role: common }
+  

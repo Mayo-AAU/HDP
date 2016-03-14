@@ -12,10 +12,11 @@
 
   roles:
     - common
-
-
+    - ambari-agent
 
 # Install Ambari server on `ambari-master` node
 - hosts: ambari-master
   become: yes
-
+  roles:
+    - common
+    - ambari-master

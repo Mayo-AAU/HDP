@@ -1,5 +1,8 @@
 # common role
 ---
+- name: Install Ambari repos
+  get_url: url=http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.1.0/ambari.repo dest=/etc/yum.repos.d/ambari.repo
+
 - name: install needed packages
   yum: name={{item}} state=latest
   with_items:
@@ -9,16 +12,35 @@
     - rsync
     - tar
     - bzip2
+    - ntp
+    - libselinux-python
 
-- name: Install Ambari repos
-  get_url: url=http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.1.0/ambari.repo dest=/etc/yum.repos.d/ambari.repo
-
-- name: create dewey .ssh directory
+- name: create root .ssh directory
   file: state=directory name=/root/.ssh owner=root mode=0700
 
 - name: copy SSH keys
-  copy: src=files/{{item}} dest=/root/.ssh/ mode=0644 owner=root group=root
+  copy: src=files/{{item}} dest=/root/.ssh/ mode=0600 owner=root group=root
   with_items:
     - authorized_keys
     - config
+
+- name: enable NTP
+  service: name=ntpd state=started enabled=yes
+
+# Networking and FQDN
+# http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/content/_edit_the_network_configuration_file.html
+- name: /etc/sysconfig/network has NETWORKING
+  lineinfile: dest=/etc/sysconfig/network line=NETWORKING=yes
+- name: /etc/sysconfig/network has hostname
+  lineinfile: dest=/etc/sysconfig/network line=HOSTNAME={{ansible_fqdn}}
+
+# iptables are off
+# http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/content/_configuring_iptables.html
+- name: disable iptables
+  service: name=firewalld state=stopped enabled=no
+
+# SELinux off
+- name: vanquish SELinux
+  selinux: state=disabled
+
 

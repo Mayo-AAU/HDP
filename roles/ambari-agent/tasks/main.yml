@@ -1,0 +1,12 @@
+# ambari-agent role
+
+- name: install ambari-agent package
+  yum: name=ambari-agent state=latest
+
+# Ambari agent
+- name: configure ambari-agent
+  lineinfile: dest=/etc/ambari-agent/conf/ambari-agent.ini regexp="hostname=localhost" line="hostname={{ambari_master}}"
+  
+- name: start ambari agent
+  service: name=ambari-agent state=started enabled=yes
+
